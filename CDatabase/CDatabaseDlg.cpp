@@ -248,9 +248,16 @@ void CCDatabaseDlg::OnBnClickedAddButton()
 	CString sDriver = L"MICROSOFT ACCESS DRIVER (*.mdb)";
 	CString sDsn, sMc;
 	sMc.Format(_T("."));
-	/////////////////////////////////////
-	CString sFile = _T("J:\\userdb.mdb");
-	/////////////////////////////////////
+	//CString sFile  = _T("J:\\userdb.mdb");
+	TCHAR buffer[MAX_PATH] = { 0 };
+	GetCurrentDirectory(MAX_PATH,buffer);
+
+	CString sFile;
+	CString path = _T("\\userdb.mdb");
+
+	sFile.Append(buffer);
+	sFile.Append(path);
+	
 	sDsn.Format(L"ODBC;DRIVER={%s};DSN='';DBQ=%s;", sDriver, sFile);
 
 	int iRec = 0;
@@ -325,9 +332,16 @@ void CCDatabaseDlg::OnBnClickedUpdateButton()
 	CString sDriver = L"MICROSOFT ACCESS DRIVER (*.mdb)";
 	CString sDsn, sMc;
 	sMc.Format(_T("."));
-	/////////////////////////////////////
-	CString sFile = _T("J:\\userdb.mdb");
-	/////////////////////////////////////
+	//CString sFile = _T("J:\\userdb.mdb");
+	TCHAR buffer[MAX_PATH] = { 0 };
+	GetCurrentDirectory(MAX_PATH, buffer);
+
+	CString sFile;
+	CString path = _T("\\userdb.mdb");
+
+	sFile.Append(buffer);
+	sFile.Append(path);
+
 	sDsn.Format(L"ODBC;DRIVER={%s};DSN='';DBQ=%s;", sDriver, sFile);
 
 	int iRec = 0;
@@ -392,9 +406,16 @@ void CCDatabaseDlg::OnBnClickedDeleteButton()
 	CString sDriver = L"MICROSOFT ACCESS DRIVER (*.mdb)";
 	CString sDsn, sMc;
 	sMc.Format(_T("."));
-	/////////////////////////////////////
-	CString sFile = _T("J:\\userdb.mdb");
-	/////////////////////////////////////
+	//CString sFile = _T("J:\\userdb.mdb");
+	TCHAR buffer[MAX_PATH] = { 0 };
+	GetCurrentDirectory(MAX_PATH, buffer);
+
+	CString sFile;
+	CString path = _T("\\userdb.mdb");
+
+	sFile.Append(buffer);
+	sFile.Append(path);
+
 	sDsn.Format(L"ODBC;DRIVER={%s};DSN='';DBQ=%s;", sDriver, sFile);
 
 	int iRec = 0;
@@ -456,9 +477,16 @@ void CCDatabaseDlg::OnBnClickedButtonDeleteAllData()
 	CString sDriver = L"MICROSOFT ACCESS DRIVER (*.mdb)";
 	CString sDsn, sMc;
 	sMc.Format(_T("."));
-	/////////////////////////////////////
-	CString sFile = _T("J:\\userdb.mdb");
-	/////////////////////////////////////
+	//CString sFile = _T("J:\\userdb.mdb");
+	TCHAR buffer[MAX_PATH] = { 0 };
+	GetCurrentDirectory(MAX_PATH, buffer);
+
+	CString sFile;
+	CString path = _T("\\userdb.mdb");
+
+	sFile.Append(buffer);
+	sFile.Append(path);
+
 	sDsn.Format(L"ODBC;DRIVER={%s};DSN='';DBQ=%s;", sDriver, sFile);
 
 	int iRec = 0;
@@ -559,9 +587,17 @@ void CCDatabaseDlg::OnBnClickedReadData()
 	CString sDriver = L"MICROSOFT ACCESS DRIVER (*.mdb)";
 	CString sDsn, sMc;
 	sMc.Format(_T("."));
-	/////////////////////////////////////
-	CString sFile = _T("J:\\userdb.mdb");
-	/////////////////////////////////////
+
+	//CString sFile = _T("J:\\userdb.mdb");
+	TCHAR buffer[MAX_PATH] = { 0 };
+	GetCurrentDirectory(MAX_PATH, buffer);
+
+	CString sFile;
+	CString path = _T("\\userdb.mdb");
+
+	sFile.Append(buffer);
+	sFile.Append(path);
+
 	int iRec = 0;
 	sDsn.Format(L"ODBC;DRIVER={%s};DSN='';DBQ=%s;", sDriver, sFile);
 
