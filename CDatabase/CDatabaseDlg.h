@@ -5,6 +5,8 @@
 #pragma once
 #include "odbcinst.h"
 #include "afxdb.h"
+#include <ntddndis.h>
+
 
 
 // CCDatabaseDlg dialog
@@ -34,8 +36,16 @@ protected:
 	afx_msg HCURSOR OnQueryDragIcon();
 	DECLARE_MESSAGE_MAP()
 public:
-	void ReadData();                // Method
-	CListCtrl m_ListControl;
+	enum Action : uint8_t
+	{
+		C = 1,
+		R = 2,
+		D = 3,
+		U = 4,
+		DA = 5,
+		N = 0 
+	};
+	CListCtrl m_ListControl;	
 	CString m_Id;                   // Variable (Value)
 	CString m_Name;                 // Variable (Value)
 	CString m_Surname;              // Variable (Value)
@@ -52,10 +62,12 @@ public:
 	afx_msg void OnBnClickedButtonDeleteAllData();
 	afx_msg void OnBnClickedReadData();
 	afx_msg void OnLvnItemchangedList(NMHDR* pNMHDR, LRESULT* pResult);
-	afx_msg void OnNMClickList1(NMHDR* pNMHDR, LRESULT* pResult);
+	afx_msg afx_msg void OnNMClickList1(NMHDR* pNMHDR, LRESULT* pResult);
+	void CCDatabaseDlg::CRUD(int action);
 	CEdit m_Id1;                    // Variable (Control)
 	CEdit m_Name1;                  // Variable (Control)
 	CEdit m_Surname1;               // Variable (Control)
 	CEdit m_PhoneNum1;              // Variable (Control)
 	CEdit m_EmailAddress1;          // Variable (Control)
+	
 };

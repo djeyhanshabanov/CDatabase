@@ -177,364 +177,58 @@ HCURSOR CCDatabaseDlg::OnQueryDragIcon()
 
 void CCDatabaseDlg::OnEnChangeEditId()
 {
-	// TODO:  If this is a RICHEDIT control, the control will not
-	// send this notification unless you override the CDialogEx::OnInitDialog()
-	// function and call CRichEditCtrl().SetEventMask()
-	// with the ENM_CHANGE flag ORed into the mask.
-
-	// TODO:  Add your control notification handler code here
 }
 
 void CCDatabaseDlg::OnEnChangeEditName()
 {
-	// TODO:  If this is a RICHEDIT control, the control will not
-	// send this notification unless you override the CDialogEx::OnInitDialog()
-	// function and call CRichEditCtrl().SetEventMask()
-	// with the ENM_CHANGE flag ORed into the mask.
-
-	// TODO:  Add your control notification handler code here
 }
 
 
 void CCDatabaseDlg::OnEnChangeEditSurname()
 {
-	// TODO:  If this is a RICHEDIT control, the control will not
-	// send this notification unless you override the CDialogEx::OnInitDialog()
-	// function and call CRichEditCtrl().SetEventMask()
-	// with the ENM_CHANGE flag ORed into the mask.
-
-	// TODO:  Add your control notification handler code here
 }
 
 
 void CCDatabaseDlg::OnEnChangeEditPhoneNum()
 {
-	// TODO:  If this is a RICHEDIT control, the control will not
-	// send this notification unless you override the CDialogEx::OnInitDialog()
-	// function and call CRichEditCtrl().SetEventMask()
-	// with the ENM_CHANGE flag ORed into the mask.
-
-	// TODO:  Add your control notification handler code here
 }
 
 
 void CCDatabaseDlg::OnEnChangeEditEmailAddress()
 {
-	// TODO:  If this is a RICHEDIT control, the control will not
-	// send this notification unless you override the CDialogEx::OnInitDialog()
-	// function and call CRichEditCtrl().SetEventMask()
-	// with the ENM_CHANGE flag ORed into the mask.
+}
 
-	// TODO:  Add your control notification handler code here
+////////////// READING DATA FROM DATABASE //////////////
+
+void CCDatabaseDlg::OnBnClickedReadData()
+{
+	CRUD(Action::R);
 }
 
 
-////////////// ADDING DATA TO DATABASE //////////////
+//////////////// ADDING DATA TO DATABASE //////////////
 void CCDatabaseDlg::OnBnClickedAddButton()
 {
-	CString str1 = _T("");
-	CString str2 = _T("");
-	CString str3 = _T("");
-	CString str4 = _T("");
-
-	m_Name1.GetWindowTextW(str1);
-	m_Surname1.GetWindowTextW(str2);
-	m_PhoneNum1.GetWindowTextW(str3);
-	m_EmailAddress1.GetWindowTextW(str4);
-
-	CDatabase database;
-	CString SqlString;
-	CString userid, username, usersurname, userphonenumber, useremailaddress;
-	CString sDriver = L"MICROSOFT ACCESS DRIVER (*.mdb)";
-	CString sDsn, sMc;
-	sMc.Format(_T("."));
-	//CString sFile  = _T("J:\\userdb.mdb");
-	TCHAR buffer[MAX_PATH] = { 0 };
-	GetCurrentDirectory(MAX_PATH,buffer);
-
-	CString sFile;
-	CString path = _T("\\userdb.mdb");
-
-	sFile.Append(buffer);
-	sFile.Append(path);
-	
-	sDsn.Format(L"ODBC;DRIVER={%s};DSN='';DBQ=%s;", sDriver, sFile);
-
-	int iRec = 0;
-	try
-	{
-			database.Open(NULL, false, false, sDsn);
-			
-			CRecordset recset(&database);
-			
-			SqlString.Format(L"INSERT INTO usertable(uname, usurname, uphonenum, uemailaddress) VALUES('%s', '%s', '%s', '%s')", str1,str2,str3,str4);
-			
-			database.ExecuteSQL(SqlString);
-
-			SqlString = "SELECT ID, uname, usurname, uphonenum, uemailaddress " "FROM usertable";
-
-			SqlString = "SELECT ID, uname, usurname, uphonenum, uemailaddress " "FROM usertable";
-
-			recset.Open(CRecordset::forwardOnly, SqlString, CRecordset::readOnly);
-
-			ResetListControl();
-
-			m_ListControl.SetExtendedStyle(LVS_EX_FULLROWSELECT);
-
-			m_ListControl.InsertColumn(0, L"ID", LVCFMT_LEFT, 111);
-			m_ListControl.InsertColumn(1, L"Name", LVCFMT_CENTER, 200);
-			m_ListControl.InsertColumn(2, L"Surname", LVCFMT_CENTER, 200);
-			m_ListControl.InsertColumn(3, L"Phone number", LVCFMT_CENTER, 200);
-			m_ListControl.InsertColumn(4, L"E-mail address", LVCFMT_CENTER, 200);
-
-			while (!recset.IsEOF()) {
-				recset.GetFieldValue(_T("ID"), userid);
-				recset.GetFieldValue(_T("uname"), username);
-				recset.GetFieldValue(_T("usurname"), usersurname);
-				recset.GetFieldValue(_T("uphonenum"), userphonenumber);
-				recset.GetFieldValue(_T("uemailaddress"), useremailaddress);
-
-				iRec = m_ListControl.InsertItem(0, userid);
-				m_ListControl.SetItemText(0, 1, username);
-				m_ListControl.SetItemText(0, 2, usersurname);
-				m_ListControl.SetItemText(0, 3, userphonenumber);
-				m_ListControl.SetItemText(0, 4, useremailaddress);
-
-				recset.MoveNext();
-			}
-			database.Close();
-	}
-	catch (CDBException* e)
-	{
-		AfxMessageBox(e->m_strError);
-	}
+	CRUD(Action::C);
 }
-
-
-////////////// UPDATING DATA FROM DATABASE //////////////
+//
+//
+//////////////// UPDATING DATA FROM DATABASE //////////////
 void CCDatabaseDlg::OnBnClickedUpdateButton()
 {
-	CString str1 = _T("");
-	CString str2 = _T("");
-	CString str3 = _T("");
-	CString str4 = _T("");
-	CString str5 = _T("");
-
-	m_Name1.GetWindowTextW(str1);
-	m_Surname1.GetWindowTextW(str2);
-	m_PhoneNum1.GetWindowTextW(str3);
-	m_EmailAddress1.GetWindowTextW(str4);
-	m_Id1.GetWindowTextW(str5);
-
-	CDatabase database;
-	CString SqlString;
-	CString userid, username, usersurname, userphonenumber, useremailaddress;
-	CString sDriver = L"MICROSOFT ACCESS DRIVER (*.mdb)";
-	CString sDsn, sMc;
-	sMc.Format(_T("."));
-	//CString sFile = _T("J:\\userdb.mdb");
-	TCHAR buffer[MAX_PATH] = { 0 };
-	GetCurrentDirectory(MAX_PATH, buffer);
-
-	CString sFile;
-	CString path = _T("\\userdb.mdb");
-
-	sFile.Append(buffer);
-	sFile.Append(path);
-
-	sDsn.Format(L"ODBC;DRIVER={%s};DSN='';DBQ=%s;", sDriver, sFile);
-
-	int iRec = 0;
-	try
-	{
-		database.Open(NULL, false, false, sDsn);
-
-		CRecordset recset(&database);
-
-		SqlString.Format(L"UPDATE usertable SET uname= '%s', usurname= '%s', uphonenum= '%s', uemailaddress= '%s' WHERE ID= %s", str1, str2, str3, str4, str5);
-		
-		database.ExecuteSQL(SqlString);
-
-		SqlString = "SELECT ID, uname, usurname, uphonenum, uemailaddress " "FROM usertable";
-
-		SqlString = "SELECT ID, uname, usurname, uphonenum, uemailaddress " "FROM usertable";
-
-		recset.Open(CRecordset::forwardOnly, SqlString, CRecordset::readOnly);
-
-		ResetListControl();
-
-		m_ListControl.SetExtendedStyle(LVS_EX_FULLROWSELECT);
-
-		m_ListControl.InsertColumn(0, L"ID", LVCFMT_LEFT, 111);
-		m_ListControl.InsertColumn(1, L"Name", LVCFMT_CENTER, 200);
-		m_ListControl.InsertColumn(2, L"Surname", LVCFMT_CENTER, 200);
-		m_ListControl.InsertColumn(3, L"Phone number", LVCFMT_CENTER, 200);
-		m_ListControl.InsertColumn(4, L"E-mail address", LVCFMT_CENTER, 200);
-
-		while (!recset.IsEOF()) {
-			recset.GetFieldValue(_T("ID"), userid);
-			recset.GetFieldValue(_T("uname"), username);
-			recset.GetFieldValue(_T("usurname"), usersurname);
-			recset.GetFieldValue(_T("uphonenum"), userphonenumber);
-			recset.GetFieldValue(_T("uemailaddress"), useremailaddress);
-
-			iRec = m_ListControl.InsertItem(0, userid);
-			m_ListControl.SetItemText(0, 1, username);
-			m_ListControl.SetItemText(0, 2, usersurname);
-			m_ListControl.SetItemText(0, 3, userphonenumber);
-			m_ListControl.SetItemText(0, 4, useremailaddress);
-
-			recset.MoveNext();
-		}
-		database.Close();
-	}
-	catch (CDBException* e)
-	{
-		AfxMessageBox(e->m_strError);
-	}
+	CRUD(Action::U);
 }
-
-////////////// DELETING DATA FROM DATABASE //////////////
+//
+//////////////// DELETING DATA FROM DATABASE //////////////
 void CCDatabaseDlg::OnBnClickedDeleteButton()
 {
-	CString str5 = _T("");
-	m_Id1.GetWindowTextW(str5);
-
-	CDatabase database;
-	CString SqlString;
-	CString userid, username, usersurname, userphonenumber, useremailaddress;
-	CString sDriver = L"MICROSOFT ACCESS DRIVER (*.mdb)";
-	CString sDsn, sMc;
-	sMc.Format(_T("."));
-	//CString sFile = _T("J:\\userdb.mdb");
-	TCHAR buffer[MAX_PATH] = { 0 };
-	GetCurrentDirectory(MAX_PATH, buffer);
-
-	CString sFile;
-	CString path = _T("\\userdb.mdb");
-
-	sFile.Append(buffer);
-	sFile.Append(path);
-
-	sDsn.Format(L"ODBC;DRIVER={%s};DSN='';DBQ=%s;", sDriver, sFile);
-
-	int iRec = 0;
-	try
-	{
-		database.Open(NULL, false, false, sDsn);
-
-		CRecordset recset(&database);
-
-		SqlString.Format(L"DELETE FROM usertable WHERE ID= %s" ,str5);
-
-		database.ExecuteSQL(SqlString);
-
-		SqlString = "SELECT ID, uname, usurname, uphonenum, uemailaddress " "FROM usertable";
-
-		SqlString = "SELECT ID, uname, usurname, uphonenum, uemailaddress " "FROM usertable";
-
-		recset.Open(CRecordset::forwardOnly, SqlString, CRecordset::readOnly);
-
-		ResetListControl();
-
-		m_ListControl.SetExtendedStyle(LVS_EX_FULLROWSELECT);
-
-		m_ListControl.InsertColumn(0, L"ID", LVCFMT_LEFT, 111);
-		m_ListControl.InsertColumn(1, L"Name", LVCFMT_CENTER, 200);
-		m_ListControl.InsertColumn(2, L"Surname", LVCFMT_CENTER, 200);
-		m_ListControl.InsertColumn(3, L"Phone number", LVCFMT_CENTER, 200);
-		m_ListControl.InsertColumn(4, L"E-mail address", LVCFMT_CENTER, 200);
-
-		while (!recset.IsEOF()) {
-			recset.GetFieldValue(_T("ID"), userid);
-			recset.GetFieldValue(_T("uname"), username);
-			recset.GetFieldValue(_T("usurname"), usersurname);
-			recset.GetFieldValue(_T("uphonenum"), userphonenumber);
-			recset.GetFieldValue(_T("uemailaddress"), useremailaddress);
-
-			iRec = m_ListControl.InsertItem(0, userid);
-			m_ListControl.SetItemText(0, 1, username);
-			m_ListControl.SetItemText(0, 2, usersurname);
-			m_ListControl.SetItemText(0, 3, userphonenumber);
-			m_ListControl.SetItemText(0, 4, useremailaddress);
-
-			recset.MoveNext();
-		}
-		database.Close();
-	}
-	catch (CDBException* e)
-	{
-		AfxMessageBox(e->m_strError);
-	}
+	CRUD(Action::D);
 }
-
-////////////// DELETING ALL DATA FROM DATABASE //////////////
+//
+//////////////// DELETING ALL DATA FROM DATABASE //////////////
 void CCDatabaseDlg::OnBnClickedButtonDeleteAllData()
 {
-	CDatabase database;
-	CString SqlString;
-	CString userid, username, usersurname, userphonenumber, useremailaddress;
-	CString sDriver = L"MICROSOFT ACCESS DRIVER (*.mdb)";
-	CString sDsn, sMc;
-	sMc.Format(_T("."));
-	//CString sFile = _T("J:\\userdb.mdb");
-	TCHAR buffer[MAX_PATH] = { 0 };
-	GetCurrentDirectory(MAX_PATH, buffer);
-
-	CString sFile;
-	CString path = _T("\\userdb.mdb");
-
-	sFile.Append(buffer);
-	sFile.Append(path);
-
-	sDsn.Format(L"ODBC;DRIVER={%s};DSN='';DBQ=%s;", sDriver, sFile);
-
-	int iRec = 0;
-	try
-	{
-		database.Open(NULL, false, false, sDsn);
-
-		CRecordset recset(&database);
-
-		SqlString.Format(L"DELETE FROM usertable");
-
-		database.ExecuteSQL(SqlString);
-
-		SqlString = "SELECT ID, uname, usurname, uphonenum, uemailaddress " "FROM usertable";
-
-		recset.Open(CRecordset::forwardOnly, SqlString, CRecordset::readOnly);
-
-		ResetListControl();
-
-		m_ListControl.SetExtendedStyle(LVS_EX_FULLROWSELECT);
-
-		m_ListControl.InsertColumn(0, L"ID", LVCFMT_LEFT, 111);
-		m_ListControl.InsertColumn(1, L"Name", LVCFMT_CENTER, 200);
-		m_ListControl.InsertColumn(2, L"Surname", LVCFMT_CENTER, 200);
-		m_ListControl.InsertColumn(3, L"Phone number", LVCFMT_CENTER, 200);
-		m_ListControl.InsertColumn(4, L"E-mail address", LVCFMT_CENTER, 200);
-
-		while (!recset.IsEOF()) {
-			recset.GetFieldValue(_T("ID"), userid);
-			recset.GetFieldValue(_T("uname"), username);
-			recset.GetFieldValue(_T("usurname"), usersurname);
-			recset.GetFieldValue(_T("uphonenum"), userphonenumber);
-			recset.GetFieldValue(_T("uemailaddress"), useremailaddress);
-
-			iRec = m_ListControl.InsertItem(0, userid);
-			m_ListControl.SetItemText(0, 1, username);
-			m_ListControl.SetItemText(0, 2, usersurname);
-			m_ListControl.SetItemText(0, 3, userphonenumber);
-			m_ListControl.SetItemText(0, 4, useremailaddress);
-
-			recset.MoveNext();
-		}
-		database.Close();
-	}
-	catch (CDBException* e)
-	{
-		AfxMessageBox(e->m_strError);
-	}
+	CRUD(Action::DA);
 }
 
 
@@ -542,7 +236,6 @@ void CCDatabaseDlg::OnBnClickedButtonDeleteAllData()
 void CCDatabaseDlg::OnLvnItemchangedList(NMHDR* pNMHDR, LRESULT* pResult)
 {
 	LPNMLISTVIEW pNMLV = reinterpret_cast<LPNMLISTVIEW>(pNMHDR);
-	// TODO: Add your control notification handler code here
 	
 	*pResult = 0;
 }
@@ -551,7 +244,6 @@ void CCDatabaseDlg::OnLvnItemchangedList(NMHDR* pNMHDR, LRESULT* pResult)
 void CCDatabaseDlg::OnNMClickList1(NMHDR* pNMHDR, LRESULT* pResult)
 {
 	LPNMITEMACTIVATE pNMItemActivate = reinterpret_cast<LPNMITEMACTIVATE>(pNMHDR);
-	// TODO: Add your control notification handler code here
 
 	int row = m_ListControl.GetSelectionMark();
 
@@ -579,26 +271,39 @@ void CCDatabaseDlg::ResetListControl()
 }
 
 
-void CCDatabaseDlg::OnBnClickedReadData()
+//// DATABASE ACTION //// 
+void CCDatabaseDlg::CRUD(int  action)
 {
+	CString str1 = _T("");
+	CString str2 = _T("");
+	CString str3 = _T("");
+	CString str4 = _T("");
+	CString str5 = _T("");
+
+	m_Name1.GetWindowTextW(str1);
+	m_Surname1.GetWindowTextW(str2);
+	m_PhoneNum1.GetWindowTextW(str3);
+	m_EmailAddress1.GetWindowTextW(str4);
+	m_Id1.GetWindowTextW(str5);
+
 	CDatabase database;
+	
+	int iRec = 0;
+
 	CString SqlString;
 	CString userid, username, usersurname, userphonenumber, useremailaddress;
 	CString sDriver = L"MICROSOFT ACCESS DRIVER (*.mdb)";
 	CString sDsn, sMc;
-	sMc.Format(_T("."));
-
-	//CString sFile = _T("J:\\userdb.mdb");
-	TCHAR buffer[MAX_PATH] = { 0 };
-	GetCurrentDirectory(MAX_PATH, buffer);
-
 	CString sFile;
 	CString path = _T("\\userdb.mdb");
+	TCHAR buffer[MAX_PATH] = { 0 };
+
+	GetCurrentDirectory(MAX_PATH, buffer);
 
 	sFile.Append(buffer);
 	sFile.Append(path);
 
-	int iRec = 0;
+	sMc.Format(_T("."));
 	sDsn.Format(L"ODBC;DRIVER={%s};DSN='';DBQ=%s;", sDriver, sFile);
 
 	try
@@ -606,6 +311,29 @@ void CCDatabaseDlg::OnBnClickedReadData()
 		database.Open(NULL, false, false, sDsn);
 
 		CRecordset recset(&database);
+
+		switch (action)
+		{
+		case (R):
+			SqlString = "SELECT ID, uname, usurname, uphonenum, uemailaddress " "FROM usertable";
+			break;
+		case (C):
+			SqlString.Format(L"INSERT INTO usertable(uname, usurname, uphonenum, uemailaddress) VALUES('%s', '%s', '%s', '%s')", str1, str2, str3, str4);
+			break;
+		case (U):
+			SqlString.Format(L"UPDATE usertable SET uname= '%s', usurname= '%s', uphonenum= '%s', uemailaddress= '%s' WHERE ID= %s", str1, str2, str3, str4, str5);
+			break;		
+		case (D):
+			SqlString.Format(L"DELETE FROM usertable WHERE ID= %s", str5);
+				break;		
+		case (DA):
+			SqlString.Format(L"DELETE FROM usertable");
+					break;
+		}
+
+		database.ExecuteSQL(SqlString);
+
+		SqlString = "SELECT ID, uname, usurname, uphonenum, uemailaddress " "FROM usertable";
 
 		SqlString = "SELECT ID, uname, usurname, uphonenum, uemailaddress " "FROM usertable";
 
@@ -615,7 +343,7 @@ void CCDatabaseDlg::OnBnClickedReadData()
 
 		m_ListControl.SetExtendedStyle(LVS_EX_FULLROWSELECT);
 
-		m_ListControl.InsertColumn(0, L"ID",  LVCFMT_LEFT, 111);  
+		m_ListControl.InsertColumn(0, L"ID", LVCFMT_LEFT, 111);
 		m_ListControl.InsertColumn(1, L"Name", LVCFMT_CENTER, 200);
 		m_ListControl.InsertColumn(2, L"Surname", LVCFMT_CENTER, 200);
 		m_ListControl.InsertColumn(3, L"Phone number", LVCFMT_CENTER, 200);
