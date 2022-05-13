@@ -318,18 +318,23 @@ void CCDatabaseDlg::CRUD(int action)
 
 		switch (action)
 		{
+			// Reading data
 		case (R):
 			SqlString = "SELECT ID, uname, usurname, uphonenum, uemailaddress " "FROM usertable";
 			break;
+			// Adding data
 		case (C):
 			SqlString.Format(L"INSERT INTO usertable(uname, usurname, uphonenum, uemailaddress) VALUES('%s', '%s', '%s', '%s')", str1, str2, str3, str4);
 			break;
+			// Updating data
 		case (U):
 			SqlString.Format(L"UPDATE usertable SET uname= '%s', usurname= '%s', uphonenum= '%s', uemailaddress= '%s' WHERE ID= %s", str1, str2, str3, str4, str5);
-			break;		
+			break;	
+			// Deleting data
 		case (D):
 			SqlString.Format(L"DELETE FROM usertable WHERE ID= %s", str5);
-				break;		
+				break;	
+			// Deleting All data	
 		case (DA):
 			SqlString.Format(L"DELETE FROM usertable");
 					break;
