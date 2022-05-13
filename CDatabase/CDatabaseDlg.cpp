@@ -211,8 +211,7 @@ void CCDatabaseDlg::OnBnClickedAddButton()
 {
 	CRUD(Action::C);
 }
-//
-//
+
 //////////////// UPDATING DATA FROM DATABASE //////////////
 void CCDatabaseDlg::OnBnClickedUpdateButton()
 {
@@ -272,8 +271,9 @@ void CCDatabaseDlg::ResetListControl()
 
 
 //// DATABASE ACTION //// 
-void CCDatabaseDlg::CRUD(int  action)
+void CCDatabaseDlg::CRUD(int action)
 {
+	// TODO: Add your control notification handler code here
 	CString str1 = _T("");
 	CString str2 = _T("");
 	CString str3 = _T("");
@@ -287,7 +287,8 @@ void CCDatabaseDlg::CRUD(int  action)
 	m_Id1.GetWindowTextW(str5);
 
 	CDatabase database;
-	
+
+	// You must change above path if it's different
 	int iRec = 0;
 
 	CString SqlString;
@@ -304,12 +305,15 @@ void CCDatabaseDlg::CRUD(int  action)
 	sFile.Append(path);
 
 	sMc.Format(_T("."));
+	// Build ODBC connection string
 	sDsn.Format(L"ODBC;DRIVER={%s};DSN='';DBQ=%s;", sDriver, sFile);
 
 	try
 	{
+		// Open the database
 		database.Open(NULL, false, false, sDsn);
 
+		// Allocate the recordset
 		CRecordset recset(&database);
 
 		switch (action)
@@ -335,20 +339,26 @@ void CCDatabaseDlg::CRUD(int  action)
 
 		SqlString = "SELECT ID, uname, usurname, uphonenum, uemailaddress " "FROM usertable";
 
+		// Build the SQL statement
 		SqlString = "SELECT ID, uname, usurname, uphonenum, uemailaddress " "FROM usertable";
 
+		// Execute the query
 		recset.Open(CRecordset::forwardOnly, SqlString, CRecordset::readOnly);
 
+		// Reset List control if there is any data
 		ResetListControl();
 
+		// populate Grids
 		m_ListControl.SetExtendedStyle(LVS_EX_FULLROWSELECT);
 
+		// Column width and heading
 		m_ListControl.InsertColumn(0, L"ID", LVCFMT_LEFT, 111);
 		m_ListControl.InsertColumn(1, L"Name", LVCFMT_CENTER, 200);
 		m_ListControl.InsertColumn(2, L"Surname", LVCFMT_CENTER, 200);
 		m_ListControl.InsertColumn(3, L"Phone number", LVCFMT_CENTER, 200);
 		m_ListControl.InsertColumn(4, L"E-mail address", LVCFMT_CENTER, 200);
 
+		// Loop through each record
 		while (!recset.IsEOF()) {
 			recset.GetFieldValue(_T("ID"), userid);
 			recset.GetFieldValue(_T("uname"), username);
@@ -356,18 +366,22 @@ void CCDatabaseDlg::CRUD(int  action)
 			recset.GetFieldValue(_T("uphonenum"), userphonenumber);
 			recset.GetFieldValue(_T("uemailaddress"), useremailaddress);
 
+			// Insert values into the list control
 			iRec = m_ListControl.InsertItem(0, userid);
 			m_ListControl.SetItemText(0, 1, username);
 			m_ListControl.SetItemText(0, 2, usersurname);
 			m_ListControl.SetItemText(0, 3, userphonenumber);
 			m_ListControl.SetItemText(0, 4, useremailaddress);
 
+			// goto next record
 			recset.MoveNext();
 		}
+		// Close the database
 		database.Close();
 	}
 	catch (CDBException* e)
 	{
+		// If a database exception occured, show error msg
 		AfxMessageBox(e->m_strError);
 	}
 }
