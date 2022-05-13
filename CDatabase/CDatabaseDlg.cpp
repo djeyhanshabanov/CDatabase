@@ -123,7 +123,7 @@ BOOL CCDatabaseDlg::OnInitDialog()
 	SetIcon(m_hIcon, FALSE);		// Set small icon
 
 
-
+	CRUD(R);
 
 	return TRUE;               // return TRUE  unless you set the focus to a control
 }
@@ -304,6 +304,7 @@ void CCDatabaseDlg::CRUD(int action)
 
 	// You must change above path if it's different
 	int iRec = 0;
+	bool isexists = false;
 
 	CString SqlString;
 	CString userid, username, usersurname, userphonenumber, useremailaddress;
@@ -329,31 +330,54 @@ void CCDatabaseDlg::CRUD(int action)
 
 		// Allocate the recordset
 		CRecordset recset(&database);
-
 		switch (action)
 		{
 			// Reading data
 		case (R):
 			SqlString = "SELECT ID, uname, usurname, uphonenum, uemailaddress " "FROM usertable";
 			break;
+
 			// Adding data
 		case (C):
-			SqlString.Format(L"INSERT INTO usertable(uname, usurname, uphonenum, uemailaddress) VALUES('%s', '%s', '%s', '%s')", str1, str2, str3, str4);
+			for (int i = 0; i < m_ListControl.GetItemCount(); i++)
+			{
+				CString phnnmbr = m_ListControl.GetItemText(i, 3);
+				if (phnnmbr == str3)
+				{
+					AfxMessageBox(L"Вече има създаден запис с този телефонен номер!");
+					isexists = true;
+					break;
+				}
+			}
+
+			if (!isexists)
+			{
+				SqlString.Format(L"INSERT INTO usertable(uname, usurname, uphonenum, uemailaddress) VALUES('%s', '%s', '%s', '%s')", str1, str2, str3, str4);
+				//SqlString.Format(L"INSERT INTO usertable(uname, usurname, uphonenum, uemailaddress) VALUES('%s', '%s', '%s', '%s')", str1, str2, str3, str4);
+				//SqlString.Format(L"INSERT INTO usertable(uname, usurname, uphonenum, uemailaddress) VALUES('%s', '%s', '%s', '%s') ", str1, str2, str3, str4);
+				//SqlString += L" where not exist (select uphonenum from usertable where uphonenum = '";
+				//SqlString += str3;
+				//SqlString += L" ' ) LIMIT 1;"; 
+			}
+			else SqlString = "SELECT ID, uname, usurname, uphonenum, uemailaddress " "FROM usertable";
 			break;
+
 			// Updating data
 		case (U):
-			SqlString.Format(L"UPDATE usertable SET uname= '%s', usurname= '%s', uphonenum= '%s', uemailaddress= '%s' WHERE ID= %s", str1, str2, str3, str4, str5);
+				SqlString.Format(L"UPDATE usertable SET uname= '%s', usurname= '%s', uphonenum= '%s', uemailaddress= '%s' WHERE ID= %s", str1, str2, str3, str4, str5);
 			break;	
+
 			// Deleting data
 		case (D):
 			SqlString.Format(L"DELETE FROM usertable WHERE ID= %s", str5);
 			break;	
+
 			// Deleting All data	
 		case (DA):
 			SqlString.Format(L"DELETE FROM usertable");
 			break;
 		}
-
+		
 		database.ExecuteSQL(SqlString);
 
 		SqlString = "SELECT ID, uname, usurname, uphonenum, uemailaddress " "FROM usertable";
@@ -397,10 +421,22 @@ void CCDatabaseDlg::CRUD(int action)
 		}
 		// Close the database
 		database.Close();
+		Clear();
 	}
 	catch (CDBException* e)
 	{
 		// If a database exception occured, show error msg
 		AfxMessageBox(e->m_strError);
 	}
+}
+
+
+/// Clear data ///
+void CCDatabaseDlg::Clear()
+{
+	m_Id1.SetWindowTextW(L"");
+	m_Name1.SetWindowTextW(L"");
+	m_Surname1.SetWindowTextW(L"");
+	m_PhoneNum1.SetWindowTextW(L"");
+	m_EmailAddress1.SetWindowTextW(L"");
 }

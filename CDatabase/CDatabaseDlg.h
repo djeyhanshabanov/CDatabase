@@ -69,5 +69,5 @@ public:
 	CEdit m_Surname1;               // Variable (Control)
 	CEdit m_PhoneNum1;              // Variable (Control)
 	CEdit m_EmailAddress1;          // Variable (Control)
-	
+	void CCDatabaseDlg::Clear();
 };
