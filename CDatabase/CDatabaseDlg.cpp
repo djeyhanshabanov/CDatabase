@@ -333,11 +333,11 @@ void CCDatabaseDlg::CRUD(int action)
 			// Deleting data
 		case (D):
 			SqlString.Format(L"DELETE FROM usertable WHERE ID= %s", str5);
-				break;	
+			break;	
 			// Deleting All data	
 		case (DA):
 			SqlString.Format(L"DELETE FROM usertable");
-					break;
+			break;
 		}
 
 		database.ExecuteSQL(SqlString);
